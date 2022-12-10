@@ -2,10 +2,12 @@ const { Telegraf } = require('telegraf');
 require('dotenv').config();
 const Electro = require("./electro");
 const Logger = require("./logger");
+const CronStatus = require("./cron-status");
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const electro = new Electro();
 const logger = new Logger();
+const cronStatus = new CronStatus(bot, electro, logger);
 
 bot.start((ctx) => {
     logger.info(`Request start`, ctx.chat);
@@ -29,3 +31,5 @@ bot.command('electro_status', async (ctx) => {
 bot.launch();
 
 logger.info(`Bot started`);
+
+cronStatus.start();
