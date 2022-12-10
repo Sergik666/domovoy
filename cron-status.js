@@ -11,7 +11,7 @@ module.exports = class CronStatus {
 
     async start() {
         await this.updateStatus();
-        cron.schedule('* */30 * * * *', async () => {
+        cron.schedule('* * */30 * * *', async () => {
             try {
                 await this.updateStatus();
             } catch (error) {
