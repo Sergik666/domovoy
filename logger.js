@@ -15,7 +15,7 @@ module.exports = class Logger {
         }
     }
 
-    _buildLogMessage(chat) {
+    getUserLog(chat) {
         if (!chat) {
             return '';
         }
