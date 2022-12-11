@@ -2,9 +2,10 @@ import cron from 'node-cron';
 
 export default class CronStatus {
 
-    constructor(bot, electro, logger) {
+    constructor(bot, electro, subscribersManager, logger) {
         this.bot = bot;
         this.electro = electro;
+        this.subscribersManager = subscribersManager;
         this.logger = logger;
         this.status = '';
     }
@@ -39,13 +40,13 @@ export default class CronStatus {
         }
         const message = `⚡️ Новые данные:\n${this.status}`;
         this.logger.info(message);
-        const subscribersIds = this.getSubscribersIds();
+        const subscribersIds = await this.getSubscribersIds();
         subscribersIds.forEach(subscriberId => {
             this.bot.telegram.sendMessage(subscriberId, message);
         });
     }
 
-    getSubscribersIds () {
-        return process.env.SUBSCRIBERS?.split(',');
+    async getSubscribersIds() {
+        return await this.subscribersManager.all();
     }
 }
