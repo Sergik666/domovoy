@@ -1,6 +1,6 @@
-const cron = require('node-cron');
+import cron from 'node-cron';
 
-module.exports = class CronStatus {
+export default class CronStatus {
 
     constructor(bot, electro, logger) {
         this.bot = bot;
@@ -11,7 +11,7 @@ module.exports = class CronStatus {
 
     async start() {
         await this.updateStatus();
-        cron.schedule('* * */30 * * *', async () => {
+        cron.schedule('*/30 * * * *', async () => {
             try {
                 await this.updateStatus();
             } catch (error) {
@@ -23,25 +23,25 @@ module.exports = class CronStatus {
     async updateStatus() {
         this.logger.info(`CronStatus. updateStatus..`);
         const status = await this.electro.getStatus();
-        if(!this.status) {
+        if (!this.status) {
             this.status = status;
             return;
         }
-        if(this.status != status) {
+        if (this.status !== status) {
             this.status = status;
-            this.sendNewStatus();
+            await this.sendNewStatus();
         }
     }
 
-    sendNewStatus() {
-        if(!this.status) {
+    async sendNewStatus() {
+        if (!this.status) {
             return;
         }
         const message = `⚡️ Новые данные:\n${this.status}`;
         this.logger.info(message);
         const subscribersIds = this.getSubscribersIds();
         subscribersIds.forEach(subscriberId => {
-            this.bot.telegram.sendMessage(subscriberId, message );
+            this.bot.telegram.sendMessage(subscriberId, message);
         });
     }
 

@@ -1,4 +1,4 @@
-module.exports = class Logger {
+export default class Logger {
     info(message, chat) {
         if (chat) {
             this._logInfoMessage(`${message}, ${this.getUserLog(chat)}`);

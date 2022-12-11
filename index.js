@@ -1,8 +1,10 @@
-const { Telegraf } = require('telegraf');
-require('dotenv').config();
-const Electro = require("./electro");
-const Logger = require("./logger");
-const CronStatus = require("./cron-status");
+import { Telegraf } from 'telegraf';
+import dotenv from "dotenv";
+import Electro from "./electro.js";
+import Logger from "./logger.js";
+import CronStatus from "./cron-status.js";
+
+dotenv.config();
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const electro = new Electro();
@@ -26,7 +28,7 @@ bot.command('electro_status', async (ctx) => {
         logger.error(error, ctx.chat);
         ctx.reply('Не удалось получить информацию об отключении');
     }
-})
+});
 
 bot.launch();
 
